@@ -213,7 +213,7 @@ def _download_weatherbench(root, dataset, variable, resolution="1.40625"):
         )
 
 
-def download(source, **kwargs):
+def download1(source, **kwargs):
     r"""Download interface.
 
     :param source: The data source to download from: "copernicus",
