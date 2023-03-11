@@ -270,7 +270,7 @@ def main():
     subparser.add_argument("--exprID", type=str, default="historical")
 
     args = parser.parse_args()
-    download(**vars(args))
+    download1(**vars(args))
 
 
 if __name__ == "__main__":
