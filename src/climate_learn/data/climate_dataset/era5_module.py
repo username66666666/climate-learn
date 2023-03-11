@@ -87,8 +87,37 @@ class ERA5(ClimateDataset):
         year = self.years[0]
         ps = glob.glob(os.path.join(dir_var, f"*{year}*.nc"))
         xr_data = xr.open_mfdataset(ps, combine="by_coords")
-        self.lat: np.ndarray = xr_data["lat"].to_numpy()
-        self.lon: np.ndarray = xr_data["lon"].to_numpy()
+        if "lat" in xr_data.variables:
+          self.lat: np.ndarray = xr_data["lat"].to_numpy()
+        elif "latitude" in xr_data.variables:
+          self.lat: np.ndarray = xr_data["latitude"].to_numpy()
+        else:
+          raise ValueError("Latitude variable not found in dataset.")
+        if "lon" in xr_data.variables:
+          self.lon: np.ndarray = xr_data["lon"].to_numpy()
+        elif "longitude" in xr_data.variables:
+          self.lon: np.ndarray = xr_data["longitude"].to_numpy()
+        else:
+          raise ValueError("Longitude variable not found in dataset.")
 
 
 ERA5Args._data_class = ERA5
+
+"""def set_lat_lon(self) -> None:
+    # lat lon is stored in each of the nc files, just need to load one and extract
+    dir_var = os.path.join(self.root_dir, self.variables[0])
+    year = self.years[0]
+    ps = glob.glob(os.path.join(dir_var, f"*{year}*.nc"))
+    xr_data = xr.open_mfdataset(ps, combine="by_coords")
+    if "lat" in xr_data.variables:
+        self.lat: np.ndarray = xr_data["lat"].to_numpy()
+    elif "latitude" in xr_data.variables:
+        self.lat: np.ndarray = xr_data["latitude"].to_numpy()
+    else:
+        raise ValueError("Latitude variable not found in dataset.")
+    if "lon" in xr_data.variables:
+        self.lon: np.ndarray = xr_data["lon"].to_numpy()
+    elif "longitude" in xr_data.variables:
+        self.lon: np.ndarray = xr_data["longitude"].to_numpy()
+    else:
+        raise ValueError("Longitude variable not found in dataset.")"""
